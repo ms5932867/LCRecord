@@ -1,29 +1,23 @@
 class Solution {
-    // + -  ()
     int index = 0;
     public int calculate(String s) {
         s = "(" + s + ")";
-        StringBuilder sb = new StringBuilder();
-        for (char c : s.toCharArray()) {
-            if (c != ' ') {
-                sb.append(c);
-            } 
-        }
-        s = sb.toString();
-        System.out.println("s = " + s);
+        //System.out.println("s = " + s);
         // s = (1-(2+3))
         return calculatorHelper(s);   
     }
 
     // calcule the result inside each ()
     // index is the index of left (
-    // when the helper function return, it needs to return two numbers: the res of current () and which index of the string the level ends
-    // here i return the current result and use a global index
+    // preOperator is the operator brefore left (
     private int calculatorHelper(String s) {
         char preOp = '+';
         int curRes = 0;
         index++;
         for (; index < s.length(); index++) {
+            if (s.charAt(index) == ' ') {
+                continue;
+            }
             if (Character.isDigit(s.charAt(index))) {
                 int curVal = 0;
                 while (index < s.length() && Character.isDigit(s.charAt(index))) {

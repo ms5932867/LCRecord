@@ -16,19 +16,26 @@ class Solution {
         int col = board[0].length;
         boolean[][] visited = new boolean[row][col];
         int startC = word.charAt(0);
-       
+        
+        List<Pos> startPos = new ArrayList<>();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 if (board[i][j] == startC) {
-                    dfs(board, visited, word, pos, 0);
-                    if (res) {  
-                        return res;
-                    }
+                    startPos.add(new Pos(i, j));
 
                 }
             }
         }
+        for (Pos pos : startPos) {
+
+            dfs(board, visited, word, pos, 0);
+
+            if (res) {  
+                return res;
+            }
+        }
         return res;
+
     }
 
     private void dfs(char[][] board, boolean[][] visited, String word, Pos pos, int index) {
@@ -40,16 +47,21 @@ class Solution {
             return;
         }
         
+
+
         int[] rowOffsets = {0, 1, 0, -1};
         int[] colOffsets = {1, 0, -1, 0};
         visited[pos.m][pos.n] = true;
         for (int d = 0; d < 4; d++) {
+;
             dfs(board, visited, word, new Pos(pos.m + rowOffsets[d], pos.n + colOffsets[d]), index + 1);
             if (res) {
                 return;
             }
         } 
-        visited[pos.m][pos.n] = false;    
+        visited[pos.m][pos.n] = false;
+
+        
     }
     private boolean validate(char[][] board, boolean[][] visited,Pos pos ) {
         if (pos.m < 0 || pos.m >= board.length || pos.n < 0 || pos.n >= board[0].length || visited[pos.m][pos.n] == true ) {

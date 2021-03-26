@@ -1,16 +1,12 @@
 class Solution {
     // + - * /
     public int calculate(String s) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : s.toCharArray()) {
-            if (c != ' ') {
-                sb.append(c);
-            } 
-        }
-        s = sb.toString();
         Stack<Integer> stk = new Stack<>();
         char preOperator = '+';
         for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' ') {
+                continue;
+            }
             if (Character.isDigit(s.charAt(i))) {
                 int curVal = 0;
                 while (i < s.length() && Character.isDigit(s.charAt(i))) {
