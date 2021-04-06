@@ -1,9 +1,9 @@
-import java.util.Map;
 class TweetCounts {
     Map<String, List<Integer>> map;
-
+    Map<String, Integer> freqTime;
     public TweetCounts() {
         map =  new HashMap<>();
+        freqTime = buildFreqTimeMap();
     }
     
     public void recordTweet(String tweetName, int time) {
@@ -12,15 +12,14 @@ class TweetCounts {
     }
     
     public List<Integer> getTweetCountsPerFrequency(String freq, String tweetName, int startTime, int endTime) {
-        Map<String, Integer> freqTime = buildFreqTimeMap();
         int time = freqTime.get(freq);
         List<Integer> records = map.get(tweetName);
         Collections.sort(records);
         List<Integer> res = new ArrayList<>();
-        res.add(0);
-        for (int n = 0; n < (endTime - startTime) / time; n++) {
+        for (int n = 0; n <= (endTime - startTime) / time; n++) {
             res.add(0);
         }
+
         int cntDelta = 0;
         for (int i = 0; i < records.size() && records.get(i) <= endTime; i++) {
             // System.out.println("i=" + i + " records.get(i)=" +records.get(i));
@@ -33,7 +32,7 @@ class TweetCounts {
                 // System.out.println(" startTime=" +startTime + " endTime="+ endTime);
                 // System.out.println("i=" + i + " records.get(i)=" +records.get(i) + " cntDelta=" +cntDelta + " res.get(cntDelta)=" + res.get(cntDelta));
             }
-            else if (records.get(i) >= startTime + time * (cntDelta + 1)) {
+            else  {
                 cntDelta++;
                 // System.out.println(" !!!cntDelta=" +cntDelta);
                 i--;
