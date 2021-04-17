@@ -1,25 +1,31 @@
-/* The knows API is defined in the parent class Relation.
-      boolean knows(int a, int b); */
+// /* The knows API is defined in the parent class Relation.
+//       boolean knows(int a, int b); */
+// 关键点是每一次call knows(a,b) 我们能排除一个人是cadidate
+// if true， a is not celebrity
+// if false, b is not celebrity
+// https://www.youtube.com/watch?v=QDehNYXlCAg laioffer
 public class Solution extends Relation {
-    public int findCelebrity(int n) { 
-        int res = 0;
-        for (int i = 1; i < n; i++) {
-            if (knows(res, i)) {
-                res = i;
+    public int findCelebrity(int n) {
+        // 0 -> n-1 assumption n > 1
+        int candidate = 0;
+        // find a candidate by one pass, make sure all the others are not candidate
+        for (int index = candidate + 1; index < n; index++) {
+            if (!knows(index, candidate) ) {
+                candidate = index;
             }
         }
-        
-        System.out.println("1res =" + res);
-        for (int i = 0; i < n; i++) {
-          if (res == i) {
-              continue;
-          }
-          if (knows(res, i) || !knows(i, res)) {
-              return -1;
-          }
+        // make sure the candidate is a celebrity by one pass
+        for (int index = 0; index < n; index++) {
+            if (index == candidate) {
+                continue;
+            }
+            if (knows(candidate, index) || !knows(index, candidate)) {
+                return -1;
+            }
         }
-        System.out.println("2res =" + res);
-        return res;
-    }         
+        return candidate;
+        
+        
+    }
 }
-    
+  
