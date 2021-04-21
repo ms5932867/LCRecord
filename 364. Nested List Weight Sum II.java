@@ -27,39 +27,43 @@
  * }
  */
 class Solution {
-    public class Item {
-        int val;
+    public class Pair {
+        int num;
         int depth;
-        Item (int val, int depth) {
-            this.val = val;
+        Pair (int num, int depth) {
+            this.num = num;
             this.depth = depth;
         }
     }
+    List<Pair> pairList =  new ArrayList<>();
     int maxDepth = 1;
     public int depthSumInverse(List<NestedInteger> nestedList) {
-        List<Item> items = new ArrayList<>();
-        
-        dfs(nestedList, items, 1);
-        return calculate(items);
+        if (nestedList == null || nestedList.size() == 0) {
+            return 0;
+        }
+        dfs(nestedList, 1);
+        return calculateRes(pairList, maxDepth);
     }
-    private void dfs (List<NestedInteger> nestedList, List<Item> items, int curDepth) {
-        maxDepth = Math.max(maxDepth, curDepth);
-        int allInt = 0;
+    private void dfs(List<NestedInteger> nestedList, int curDepth) {
 
+        if (nestedList == null || nestedList.size() == 0) {
+            return;
+        } 
+        maxDepth = Math.max(maxDepth, curDepth);
+        int curSum = 0;
         for (NestedInteger ni : nestedList) {
             if (ni.isInteger()) {
-                allInt += ni.getInteger();
+                curSum += ni.getInteger();
             } else {
-                dfs(ni.getList(), items, curDepth + 1);
+                dfs(ni.getList(), curDepth + 1);
             }
         }
-        items.add(new Item(allInt, curDepth));   
+        pairList.add(new Pair(curSum, curDepth));
     }
-
-    private int calculate(List<Item> items){
+    private int calculateRes(List<Pair> pairList ,int maxDepth ) {
         int sum = 0;
-        for (Item i : items) {
-            sum += i.val * (maxDepth - i.depth + 1);
+        for (Pair p : pairList) {
+            sum += (p.num * (maxDepth - p.depth + 1));
         }
         return sum;
     }

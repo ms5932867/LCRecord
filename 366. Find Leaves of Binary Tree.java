@@ -1,43 +1,26 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
+// Use height, 
+// if (res.size() == height) {
+//     res.add(new ArrayList<>());
+// }
 class Solution {
     List<List<Integer>> res = new ArrayList<>();
     public List<List<Integer>> findLeaves(TreeNode root) {
         if (root == null) {
             return res;
         }
-
-        getHeight(root);
+        dfs(root);
         return res;
     }
-    private int getHeight(TreeNode node) {
+    private int dfs(TreeNode node) {
         if (node == null) {
             return -1;
         }
-        int curHeight;
-        if (node.left == null && node.right == null) {
-            curHeight = 0;  
-        } else {
-            curHeight = Math.max(getHeight(node.left), getHeight(node.right)) + 1;
-        }
-        while (res.size() <= curHeight) {
+        
+        int height = Math.max(dfs(node.left), dfs(node.right)) + 1;
+        if (res.size() == height) {
             res.add(new ArrayList<>());
         }
-        System.out.println(curHeight + " " + node.val);
-        res.get(curHeight).add(node.val);
-        return curHeight;
+        res.get(height).add(node.val);
+        return height;
     }
 }

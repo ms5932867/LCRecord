@@ -1,5 +1,6 @@
 import java.util.Map;
 class WordDistance {
+    // 小的那个移动指针, 变大， 有可能让距离变小
     String[] wordsDict;
     Map<String, List<Integer>> dict;
     public WordDistance(String[] wordsDict) {
@@ -34,9 +35,3 @@ class WordDistance {
         return dif;
     }
 }
-
-/**
- * Your WordDistance object will be instantiated and called as such:
- * WordDistance obj = new WordDistance(wordsDict);
- * int param_1 = obj.shortest(word1,word2);
- */
