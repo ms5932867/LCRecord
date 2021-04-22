@@ -10,6 +10,7 @@ class Solution {
          * the first row. We also need to remember the color of
          * the lowest. */
         for (int i = 1; i < costs.length; i++) {
+            // these two needs to be reset to MAX_VALUE in each round.
             int[] colorAndMinCost = new int[]{-1, Integer.MAX_VALUE};
             int secondMin = Integer.MAX_VALUE;
 

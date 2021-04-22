@@ -19,23 +19,25 @@ class Solution {
         if (root == null) {
             return res;
         }
-        Queue<TreeNode> q = new LinkedList<>();
-        q.offer(root);
-        while(!q.isEmpty()) {
-            List<Integer> curLevel = new ArrayList<>();
-            for (int s = q.size(); s > 0 ; s--) {
-                TreeNode cur = q.poll();
-                curLevel.add(cur.val);
-                if (cur.left != null) {
-                    q.offer(cur.left);
-                }
-                if (cur.right != null) {
-                    q.offer(cur.right);
-                }
+        Stack<TreeNode> stk = new Stack<>();
+        Stack<Integer> height = new Stack<>();
+        TreeNode p = root;
+        int d = 0;
+        while (p != null || !stk.isEmpty()) {
+            while ( p != null) {
+                d++;
+                stk.push(p);
+                height.push(d);
+                p = p.left;
             }
-            res.add(curLevel);
+            p = stk.pop();
+            d = height.pop();
+            while (res.size() < d) {
+                res.add(new ArrayList<>());
+            }
+            res.get(d - 1).add(p.val);
+            p = p.right;
         }
         return res;
-
     }
 }

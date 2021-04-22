@@ -28,25 +28,25 @@ class Solution {
         if (root == null) {
             return 0;
         }
-        int d = 1;
-        int max = 1;
         Stack<TreeNode> stk = new Stack<>();
         Stack<Integer> depth = new Stack<>();
         TreeNode p = root;
+        int d = 0;
+        int max = d;
         while(!stk.isEmpty() || p != null) {
-            if (p != null) {
-                max = Math.max(max, d);
+            while(p != null) {
                 stk.push(p);
-                depth.push(d);
-                p = p.left;
                 d++;
-                
-            } else {
-                p = stk.pop().right;
-                d = depth.pop()+ 1;
+                // System.out.println(d);
+                depth.push(d);
+                max = Math.max(max, d);
+                p = p.left;
             }
+            
+            p = stk.pop();
+            d = depth.pop();
+            p = p.right;
         }
         return max;
-        
     }
 }
