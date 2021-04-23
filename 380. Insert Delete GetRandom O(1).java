@@ -1,40 +1,50 @@
+import java.util.Map;
 class RandomizedSet {
-    Map<Integer, Integer> map;
-    List<Integer> list;
+    Map<Integer, Integer> numToIndex;
+    List<Integer> nums;
     /** Initialize your data structure here. */
     public RandomizedSet() {
-        map = new HashMap<>();
-        list = new ArrayList<>();
+        numToIndex = new HashMap<>();
+        nums = new ArrayList<>();
     }
     
     /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     public boolean insert(int val) {
-        if (map.containsKey(val)) {
+        if (numToIndex.containsKey(val)) {
             return false;
         }
-        map.put(val, list.size());
-        list.add(val);
+        numToIndex.put(val, nums.size());
+        nums.add(val);
         return true;
     }
     
     /** Removes a value from the set. Returns true if the set contained the specified element. */
     public boolean remove(int val) {
-        if (!map.containsKey(val)) {
+        if (!numToIndex.containsKey(val)) {
             return false;
         }
-        int index = map.get(val);
-        int lastVal = list.get(list.size() - 1);
-        map.put(lastVal, index);
-        map.remove(val);
-        list.set(index, lastVal);
-        list.remove(list.size() - 1);
+        int index = numToIndex.get(val);
+        // 如果删除的就是最后一个， 要注意map 先加再删除!!!!
+        // if (index == nums.size() - 1) {
+        //     nums.remove(nums.size() - 1);
+        //     numToIndex.remove(val);
+        //     return true;
+        // }
+
+        int lastNum = nums.get(nums.size() - 1);
+        nums.set(index, lastNum);
+        nums.remove(nums.size() - 1);
+
+        
+        numToIndex.put(lastNum, index);
+        numToIndex.remove(val);
         return true;
     }
     
     /** Get a random element from the set. */
     public int getRandom() {
-        int index = (int)(Math.random() * list.size());
-        return list.get(index);
+        int index = (int)(Math.random() * nums.size());
+        return nums.get(index);
     }
 }
 
