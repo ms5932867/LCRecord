@@ -13,3 +13,26 @@ class Solution {
         return max;
     }
 }
+
+
+
+class Solution {
+    // -5, -4. -1, 7, -6, 8
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int minPreSum = 0;
+        int curPreSum = 0;
+        int res = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            curPreSum += nums[i];
+            res = Math.max(res, curPreSum - minPreSum);
+            
+            minPreSum = Math.min(minPreSum, curPreSum);
+
+            // System.out.println(minPreSum + " " + curPreSum + " " + res);
+        }
+        return res;
+    }
+}
