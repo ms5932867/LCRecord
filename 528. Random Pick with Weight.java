@@ -83,7 +83,7 @@ class Solution {
                 return m;
             } 
             else if (target > preSum[m]) {
-                s = m + 1;
+                s = m;
             } 
             else {
                 e = m;
