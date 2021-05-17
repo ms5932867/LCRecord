@@ -1,20 +1,23 @@
 class Solution {
     public int minMutation(String start, String end, String[] bank) {
-        Set<String> visited = new HashSet<>();
+        Set<String> bankSet = new HashSet<>();
+        
+        for (String s : bank) {
+            bankSet.add(s);
+        }
         Queue<String> q = new LinkedList<>();
         q.offer(start);
-        visited.add(start);
         int step = 0;
-        while(!q.isEmpty()) {
-            for (int i = q.size(); i > 0; i-- ){
+        while (!q.isEmpty()) {
+            for (int s = q.size(); s > 0; s--) {
                 String cur = q.poll();
                 if (cur.equals(end)) {
                     return step;
                 }
                 for (String next : bank) {
-                    if (validNext(visited, cur, next)) {
+                    if (bankSet.contains(next) && validate(cur, next)) {
                         q.offer(next);
-                        visited.add(next);
+                        bankSet.remove(next);
                     }
                 }
             }
@@ -22,20 +25,16 @@ class Solution {
         }
         return -1;
     }
-    private boolean validNext(Set<String> visited, String cur, String next) {
-        if (visited.contains(next) || cur.length() != next.length()) {
+    private boolean validate(String s, String t) {
+        if (s.length() != t.length()) {
             return false;
         }
-        int dif = 0;
-        for(int i = 0; i < cur.length(); i++) {
-            if (cur.charAt(i) != next.charAt(i)) {
-                dif++;
-                if (dif > 1) {
-                    return false;
-                }
+        int cnt = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != t.charAt(i)) {
+                cnt++;
             }
         }
-        return dif == 1;
-
+        return cnt ==1;
     }
 }
