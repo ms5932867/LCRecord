@@ -1,4 +1,5 @@
 // https://www.youtube.com/watch?v=v8irqkTcJ6s
+// compare  5,  516 and 1312
 class Solution {
     // b b b a b
     // 0 1 2 3 4
@@ -16,13 +17,15 @@ class Solution {
         int[][] dp = new int[l][l];
         
         for (int i = l - 1; i >= 0 ; i--) {
-            for (int j = i; j < l; j++) { //注意 i j 起始的位置， 为什么要从这个位置开始？ 终点是【0】【l-1]， 从终点的反方向开始
+            for (int j = i; j < l; j++) { 
+                //注意 i j 起始的位置， 为什么要从这个位置开始？ 终点是[0]][l-1]， 从终点的反方向开始
+                // 计算dp[i][j] 需要用到 dp[i + 1][j - 1]， dp[i][j-1], dp[i+1][j]， 所以i从最大值开始，就从最小值开始
                 if (i == j) {
                     dp[i][j] = 1;
                     continue;
                 }
                 if (s.charAt(i) == s.charAt(j)) {
-                    dp[i][j] = 2 + dp[i + 1][j - 1];
+                    dp[i][j] = 2 + dp[i + 1][j - 1]; //  if (i > j) dp[i][j] = 0 by default            
                 } else {
                     dp[i][j] = Math.max(dp[i][j-1], dp[i+1][j]);
                 }
