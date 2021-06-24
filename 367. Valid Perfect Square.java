@@ -1,6 +1,6 @@
 class Solution {
     public boolean isPerfectSquare(int num) {
-        if (num <= 1) {
+        if (num == 1) {
             return true;
         }
         int s = 1;
@@ -9,14 +9,13 @@ class Solution {
             int m = s + (e - s) / 2;
             if (num / m == m && num % m == 0) {
                 return true;
-            } else if (num / m < m) {
-                e = m;
-            } else {
+            } else if ( num / m > m) {
                 s = m;
+            } else {
+                e = m;
             }
         }
-
-        if ((num / s == s && num % s == 0)|| (num / e == e && num % e == 0)) {
+        if ( s * s == num || e * e == num) {
             return true;
         }
         return false;
