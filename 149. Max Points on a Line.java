@@ -66,3 +66,73 @@ class Solution {
     }
 
 }
+
+
+//version 2
+class Solution {
+    public int maxPoints(int[][] points) {
+        if (points == null ) {
+            return 0;
+        }
+        if (points.length <= 2) {
+            return points.length;
+        }
+        int max = 0;
+        Map<String, Integer> slopeCnt = new HashMap<>();
+        for (int i = 0; i < points.length; i++) {
+            int[] start = points[i];
+            int curMax = 0;// not include start 
+            int samePoint = 1;
+            slopeCnt = new HashMap<>();
+
+            for (int j = i + 1; j < points.length; j++) {
+                int[] end = points[j];
+                if (samePoint(start, end)) {
+                    samePoint++;
+                    continue;
+                }
+                String slope = getSlope(start, end);
+                curMax = updateCurMax(slope, curMax, slopeCnt);
+
+            }
+            curMax = curMax + samePoint;
+            max = Math.max(curMax, max);
+        }
+        return max;
+    }
+    private boolean samePoint(int[] s, int[] e) {
+        return s[0] == e[0] && s[1] == e[1];
+    }
+    private String getSlope(int[] s, int[] e) { //y /x
+        int y = e[1] - s[1];
+        int x = e[0] - s[0];
+        if (y == 0) { //horizontal
+            return "h";
+        }
+        if (x == 0) { //vertical
+            return "v";
+        }
+        int gcd = getGcd(Math.abs(x), Math.abs(y));
+        
+        if (y * x > 0) {
+            return String.valueOf(Math.abs(y)/gcd) + "/" + String.valueOf(Math.abs(x)/gcd);
+        } 
+        return "-" + String.valueOf(Math.abs(y)/gcd) + "/" + String.valueOf(Math.abs(x)/gcd);
+    }
+    private int getGcd(int a, int b) {
+        if (a < b) {
+            return getGcd(b, a);
+        }
+        if (a % b == 0) {
+            return b;
+        }
+        
+        return getGcd(b, a % b);
+    }
+    private int updateCurMax(String slope, int curMax, Map<String, Integer> slopeCnt) {
+        slopeCnt.putIfAbsent(slope, 0);
+        slopeCnt.put(slope, slopeCnt.get(slope) + 1);
+        return Math.max(curMax, slopeCnt.get(slope));
+        
+    }
+}

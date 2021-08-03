@@ -14,6 +14,53 @@ import java.util.Map;
 
 // useful solution from laioffer
 // https://www.youtube.com/watch?v=9qFR2WQGqkU
+
+//v1:
+class Solution {
+    public String minWindow(String s, String t) {
+        if (((s == null || s.length() == 0) && (t != null || t.length() != 0)) || t.length() > s.length()) {
+            return "";
+        }
+        if (s.equals(t)) {
+            return s;
+        }
+        Map<Character, Integer> tCnt = new HashMap<>(); 
+        // count the number of chars in t that remains to be find in s
+        // > 0  still some to find, < 0 already contains more than the t needs
+        for (char c: t.toCharArray()) {
+            tCnt.putIfAbsent(c, 0);
+            tCnt.put(c, tCnt.get(c) + 1);
+        }
+        int remain = t.length(); // the number of chars in t that remains to be find in s
+        int left = 0;
+        String res = "";
+        for (int right = 0; right < s.length(); right++) {
+            char rc = s.charAt(right);
+            if (tCnt.containsKey(rc)) {
+                tCnt.put(rc, tCnt.get(rc) - 1);
+                if (tCnt.get(rc) >= 0) {
+                    remain--;
+                }
+            }
+            while (remain == 0) {
+                if (res.length() == 0 || res.length() > right - left + 1) {
+                    res = s.substring(left, right + 1);
+                } 
+                char lc = s.charAt(left);
+                if (tCnt.containsKey(lc)) {
+                    tCnt.put(lc, tCnt.get(lc) + 1);
+                    if (tCnt.get(lc) > 0) {
+                        remain++;
+                    }
+                }
+                left++;
+            }
+        }
+        return res;
+    }
+}
+
+// v2
 class Solution {
     public String minWindow(String s, String t) {
         if (t.length() > s.length()) {

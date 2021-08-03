@@ -29,23 +29,23 @@
 
 //dfs
 
-// class Solution {
-//     public int depthSum(List<NestedInteger> nestedList) {
-//         return helper(nestedList, 1);
-//     }
-//     private int helper(List<NestedInteger> nestedList, int depth) {
-//         int curSum = 0;
-//         for (NestedInteger ni : nestedList) {
-//             if (ni.isInteger()) {
-//                 curSum += depth * ni.getInteger();
-//             }
-//             else {
-//                 curSum += helper(ni.getList(), depth + 1);
-//             }
-//         }
-//         return curSum;
-//     }
-// }
+class Solution {
+    public int depthSum(List<NestedInteger> nestedList) {
+        return helper(nestedList, 1);
+    }
+    private int helper(List<NestedInteger> nestedList, int depth) {
+        int curSum = 0;
+        for (NestedInteger ni : nestedList) {
+            if (ni.isInteger()) {
+                curSum += depth * ni.getInteger();
+            }
+            else {
+                curSum += helper(ni.getList(), depth + 1);
+            }
+        }
+        return curSum;
+    }
+}
 
 //bfs
 
@@ -73,4 +73,26 @@ class Solution {
         return sum;
     }
 }
-
+// bfs
+class Solution {
+    public int depthSum(List<NestedInteger> nestedList) {
+        int curDpt = 1;
+        int sum = 0;
+        Queue<List<NestedInteger>> q = new LinkedList<>();
+        q.offer(nestedList);
+        while(!q.isEmpty()) {
+            for (int s = q.size(); s > 0; s--) {
+                List<NestedInteger> curList = q.poll();
+                for (NestedInteger ni : curList) {
+                    if (ni.isInteger()) {
+                        sum += ni.getInteger() * curDpt;
+                    } else {
+                        q.offer(ni.getList());
+                    }
+                }
+            }
+            curDpt++;
+        }
+        return sum;
+    }
+}

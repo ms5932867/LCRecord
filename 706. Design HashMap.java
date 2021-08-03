@@ -1,64 +1,60 @@
-// Design a HashMap without using any built-in hash table libraries.
-
-// To be specific, your design should include these functions:
-
-// put(key, value) : Insert a (key, value) pair into the HashMap. If the value already exists in the HashMap, update the value.
-// get(key): Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
-// remove(key) : Remove the mapping for the value key if this map contains the mapping for the key.
-
-
 class MyHashMap {
     class Pair {
         int k;
         int v;
-        Pair(int k, int v) {
+        Pair (int k, int v) {
             this.k = k;
             this.v = v;
         }
     }
-    List<List<Pair>> list;
     int modulo;
+    List<List<Pair>> map;
     /** Initialize your data structure here. */
     public MyHashMap() {
-        list = new ArrayList<>();
-        modulo = 769;
-        for (int i = 0; i < modulo; i++) {
-            list.add(new ArrayList<>());
+        modulo =  1000;
+        map = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            map.add(new ArrayList<>());
         }
     }
     
     /** value will always be non-negative. */
     public void put(int key, int value) {
-        int index = key % modulo;
-        for (Pair p : list.get(index)) {
-            if (p.k == key) {
-                list.get(index).remove(p);
-                break;
-            }
+        int i = find(key);
+        if ( i != -1) {
+            map.get(key % modulo).remove(i);
         }
-        list.get(index).add(new Pair(key, value));
+        Pair p = new Pair(key, value);
+        map.get(key % modulo).add(p);
     }
     
     /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
     public int get(int key) {
-        int index = key % modulo;
-        for (Pair p : list.get(index)) {
-            if (p.k == key) {
-                return p.v;
-            }
+        int i = find(key);
+        if ( i == -1) {
+            return -1;
         }
-        return -1;
+        return map.get(key % modulo).get(i).v;
+        
     }
     
     /** Removes the mapping of the specified value key if this map contains a mapping for the key */
     public void remove(int key) {
-        int index = key % modulo;
-        for (Pair p : list.get(index)) {
-            if (p.k == key) {
-                list.get(index).remove(p);
-                return;
+        int i = find(key);
+        if ( i == -1) {
+            return;
+        }
+        map.get(key % modulo).remove(i);
+    }
+
+    private int find(int key) { // return the index of the pair in that list
+        List<Pair> list = map.get(key % modulo);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).k == key) {
+                return i;
             }
         }
+        return -1;
     }
 }
 

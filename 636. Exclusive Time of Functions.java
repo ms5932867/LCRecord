@@ -52,3 +52,54 @@ class Solution {
         return sb.toString();
     }
 }
+
+// version 2
+class Solution {
+    public class Log {
+        int id;
+        boolean isStart;
+        int time;
+        Log(int id, boolean isStart, int time) {
+            this.id = id;
+            this.isStart = isStart;
+            this.time = time;
+        }
+    }
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] res = new int[n];
+        Stack<Log> stk = new Stack<>();
+        for (String l: logs) {
+            Log curLog = new Log(getId(l),isStart(l),getTime(l));
+            if (stk.isEmpty()) {
+                stk.push(curLog);
+                continue;
+            } 
+            if (!curLog.isStart) {
+                Log lastLog = stk.pop();
+                res[curLog.id] += (curLog.time - lastLog.time + 1);
+                if (!stk.isEmpty()) {
+                    Log lastStartLog = stk.pop();
+                    stk.push(new Log(lastStartLog.id, lastStartLog.isStart, curLog.time + 1));
+                }
+            } else {
+                Log lastLog = stk.peek();
+                res[lastLog.id] += (curLog.time - lastLog.time);
+                stk.push(curLog);
+            }
+
+        }
+        return res;
+    }
+    private int getId(String l) {
+        return Integer.valueOf(l.split(":")[0]);
+    }
+    private boolean isStart(String l){
+        if (l.split(":")[1].equals("start")) {
+            return true;
+        }
+        return false;
+    }
+    private int getTime(String l) {
+        return Integer.valueOf(l.split(":")[2]);
+    }
+}

@@ -24,3 +24,22 @@ class Solution {
         return height;
     }
 }
+
+class Solution {
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+         getHeight(root, res);
+        return res;
+    }
+    private int getHeight(TreeNode node, List<List<Integer>> res) {
+        if (node == null) {
+            return 0;
+        }
+        int height = Math.max(getHeight(node.left, res), getHeight(node.right, res)) + 1;
+        while (res.size() < height) {
+            res.add(new ArrayList<>());
+        }
+        res.get(height - 1).add(node.val);
+        return height;
+    }
+}
