@@ -40,7 +40,7 @@ class Solution {
             }
 
         }
-        return secondMin == -1 ? -1: secondMin;
+        return secondMin;
     }
 }
 // dfs
