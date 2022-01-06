@@ -50,7 +50,7 @@ class Solution {
                     return false;
                 } else {
                     skip++;
-                    return validPalindrome(s.substring(0, l) + s.substring(l + 1, s.length())) || validPalindrome(s.substring(0, r) + s.substring(r + 1, s.length()));
+                    return validPalindrome(s.substring(l + 1, r + 1)) || validPalindrome(s.substring(l, r));
                 }
             }
         }
