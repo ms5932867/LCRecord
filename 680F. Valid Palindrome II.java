@@ -1,4 +1,5 @@
 // 遇到不相等的情况， 不能只考虑一种， 两种情况都要继续往下检测， 一个true就return true
+// Solution 1: with helper function
 class Solution {
     public boolean validPalindrome(String s) {
         if (s == null || s.length() == 0) {
@@ -25,6 +26,32 @@ class Solution {
                 continue;
             } else {
                 return false;
+            }
+        }
+        return true;
+    }
+}
+
+// Solution 2
+class Solution {
+    int skip = 0;
+    public boolean validPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+        int l = 0;
+        int r = s.length() - 1;
+        while (l < r) {
+            if (s.charAt(l) == s.charAt(r)) {
+                l++;
+                r--;
+            } else {
+                if (skip == 1) {
+                    return false;
+                } else {
+                    skip++;
+                    return validPalindrome(s.substring(0, l) + s.substring(l + 1, s.length())) || validPalindrome(s.substring(0, r) + s.substring(r + 1, s.length()));
+                }
             }
         }
         return true;
