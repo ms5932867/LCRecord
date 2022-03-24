@@ -3,20 +3,18 @@ class Solution {
         if (s == null || s.length() == 0) {
             return s;
         }
+        String[] split = s.split(" ");
         StringBuilder sb = new StringBuilder();
-        String[] splitted = s.split(" ");
-        for (int i = splitted.length - 1; i>= 0; i--) {
-            String word = splitted[i];
-            if (word.equals("")) {
+        for (int i = split.length - 1; i >= 0; i-- ) {
+            if (split[i].equals("")) {
                 continue;
             }
-            sb.append(word);
-            sb.append(" ");
+            sb.append(split[i] + " ");
         }
-        sb.deleteCharAt(sb.length() - 1);
-        return sb.toString();
+        return sb.substring(0, sb.length() - 1).toString();
     }
 }
+
 // 	split string with multiple  " ", will get "" or length == 0
 // public static void main(String []args){
 //     System.out.println("Hello World");
