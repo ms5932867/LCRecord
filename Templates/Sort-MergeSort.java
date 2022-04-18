@@ -5,10 +5,12 @@ class Solution {
         return nums;
     }
     private void divide(int[] nums, int s, int e) {
-        if (s >= e) {
+        if (s >= e) { // note > and =, otherwise stack overflow, if s == m == e
             return;
         }
         int m = s + (e - s) / 2;
+        // System.out.println("s=" + s + " m=" + m + " e=" + e);
+        
         divide(nums, s, m);
         divide(nums, m + 1, e);
         merge(nums, s, m, e);

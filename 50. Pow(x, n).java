@@ -1,3 +1,28 @@
+//solution 1:
+class Solution {
+    public double myPow(double x, int n) {
+        return helper(x, (long)n);
+        
+    }
+    private double helper(double x, long n) {
+        if (n == 0) {
+            return 1;
+        }
+        if (n == 1) {
+            return x;
+        }
+        if (n < 0) {
+            return 1 / helper(x , n * (-1));
+        }
+        double half = helper(x, n / 2);
+        if (n % 2 == 0) {
+            return half * half;
+        }
+        
+        return half * half * x;
+    }
+}
+//solution 2
 class Solution {
     public double myPow(double x, int n) {
         if (x == 0) {
