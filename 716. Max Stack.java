@@ -3,82 +3,83 @@
 //Most operations involving TreeMap are O(logN).
 //Space Complexity: O(N), the size of the data structures used.
 // doulbe LinkedList  + TreeMap
+// Note the value of treeMap has to be list, cannot be set.
+//  Since we need to gaurantee to delete the last one every time
+
 // https://dzone.com/articles/performance-analysis-of-arraylist-and-linkedlist-i#:~:text=To%20remove%20by%20index%2C%20ArrayList,O(N)%20time%20complexity.
 // https://www.tutorialspoint.com/Difference-between-TreeMap-HashMap-and-LinkedHashMap-in-Java#:~:text=TreeMap%20has%20complexity%20of%20O,but%20allow%20multiple%20null%20values.
 class MaxStack {
-    public class Node {
+    class Node {
         int val;
-        Node prev = null;
-        Node next = null;
-        Node (int val) {
+        Node pre;
+        Node nxt;
+        Node(int val, Node pre, Node nxt) {
             this.val = val;
+            this.pre = pre;
+            this.nxt = nxt;
         }
-
     }
-    TreeMap<Integer, List<Node>> intToNodes;
     Node head;
     Node tail;
-    /** initialize your data structure here. */
+    TreeMap<Integer, List<Node>> map;
     public MaxStack() {
-        intToNodes =  new TreeMap<>();
-        head = new Node(Integer.MIN_VALUE);
-        tail = new Node(Integer.MIN_VALUE);
-        head.next = tail;
-        tail.prev = head;
+        head = new Node(Integer.MIN_VALUE, null, null);
+        tail = new Node(Integer.MAX_VALUE, head, null); 
+        head.nxt = tail;
+        map = new TreeMap<>();
+        
     }
     
     public void push(int x) {
-        Node cur = new Node(x);
+        Node cur = new Node(x, tail.pre, tail);
+        
         addNode(cur);
-        intToNodes.putIfAbsent(x, new ArrayList<>());
-        intToNodes.get(x).add(cur);
     }
-    // add a node before Tail
-    private void addNode(Node node) {
-        Node nodeBeforeTail = tail.prev;
-        nodeBeforeTail.next = node;
-        node.prev = nodeBeforeTail;
-        node.next = tail;
-        tail.prev = node;
+    
+    private void addNode(Node cur) {
+        Node pre = tail.pre;
+        pre.nxt = cur;
+        tail.pre = cur;
+        
+        map.putIfAbsent(cur.val, new ArrayList<>());
+        map.get(cur.val).add(cur);
     }
-
     public int pop() {
-        Node cur = tail.prev;
-        deleteNodeFromTreeMap(cur);
+        Node cur = tail.pre;
         deleteNode(cur);
         return cur.val;
     }
-    private void deleteNodeFromTreeMap(Node node) {
-        int size = intToNodes.get(node.val).size();
-        if (size == 1) {
-            intToNodes.remove(node.val);
-        } else {
-            intToNodes.get(node.val).remove(size - 1);
-        }
-    }
-    private void deleteNode(Node node) {
-        Node prev = node.prev;
-        Node next = node.next;
-        prev.next = next;
-        next.prev = prev;
-    }
-    public int top() { //O(1)
-        return tail.prev.val;
+    
+    public int top() {
+        return tail.pre.val;
     }
     
     public int peekMax() {
-        return intToNodes.lastKey();
-
+        return map.lastKey();
     }
     
     public int popMax() {
-        int max = intToNodes.lastKey();
-        int size = intToNodes.get(max).size();
-        Node cur = intToNodes.get(max).get(size - 1);
-        deleteNodeFromTreeMap(cur);
+        int size = map.get(map.lastKey()).size();
+        Node cur = map.get(map.lastKey()).get(size - 1);
         deleteNode(cur);
-        return max;
+        return cur.val;
+        
     }
+    private void deleteNode(Node cur) {
+        Node pre = cur.pre;
+        Node nxt = cur.nxt;
+        pre.nxt = nxt;
+        nxt.pre = pre;
+        
+        
+        int size = map.get(cur.val).size();
+        map.get(cur.val).remove(size - 1);
+        // map.get(cur.val).remove(cur); this also works
+        if (map.get(cur.val).size() == 0) {
+            map.remove(cur.val);
+        }
+    }
+    
 }
 
 /**
