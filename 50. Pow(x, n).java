@@ -1,59 +1,31 @@
-//solution 1:
+/**
+ * 50. Pow(x, n)
+ * https://leetcode.com/problems/powx-n/
+ * Pow(x, n) is a mathematical function to calculate the value of x raised to the power of n (i.e., x^n).
+
+Given a floating-point value x and an integer value n, implement the myPow(x, n) function, which calculates x raised to the power n.
+
+ */
 class Solution {
     public double myPow(double x, int n) {
-        return helper(x, (long)n);
-        
+        long nLong = (long)n;
+        if (nLong < 0) {
+            x = 1 /x;
+            nLong = nLong * (-1); 
+        }
+        return myPowLongInput(x, nLong);
     }
-    private double helper(double x, long n) {
+    public double myPowLongInput(double x, long n) {
         if (n == 0) {
             return 1;
-        }
-        if (n == 1) {
-            return x;
-        }
-        if (n < 0) {
-            return 1 / helper(x , n * (-1));
-        }
-        double half = helper(x, n / 2);
-        if (n % 2 == 0) {
-            return half * half;
-        }
-        
-        return half * half * x;
-    }
-}
-//solution 2
-class Solution {
-    public double myPow(double x, int n) {
-        if (x == 0) {
-            return 0;
-        }
-        if (x == 1) {
-            return x;
-        }
-        if (n == 0) {
-            return 1;
-        }
-        
-        if (n < 0) {
-            return  1.0 / helper(x, n * (-1));
-            //只能乘以一次-1， 如果把这里移到helper 会overflow，因为-2147483648 to 2147483647， -2147483648* -1 = -2147483648
-            //另一种办法是把n写成long
-        }
-
-        return helper(x, n);
-        
-
-    }
-    private double helper(double x, int n) {
-        if (n == 0) {
-            return 1;
-        }
-        double half = helper(x, n/2);
-        if (n % 2 == 0) {
-            
-            return half * half;
         } 
-        return half * half * x;
+        double half = myPowLongInput(x, n / 2);  
+        return n % 2 == 0 ? half * half : half * half * x;
     }
 }
+/*
+int 无法表示 -Integer.MIN_VALUE，会溢出
+Integer.MIN_VALUE = -2147483648
+Integer.MAX_VALUE = 2147483647
+int 的负数比正数多一个，所以最小值无法取反 → 必须转 long
+*/
